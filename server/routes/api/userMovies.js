@@ -1,7 +1,8 @@
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const router = express.Router();
 
