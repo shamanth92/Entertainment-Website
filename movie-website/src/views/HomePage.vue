@@ -3,11 +3,14 @@ import { onMounted, ref, toRaw } from 'vue'
 import PopularMovies from '@/components/Movies/PopularMovies.vue'
 import HomeContent from '@/components/Shared/HomeContent.vue'
 import { useEntertainmentStore } from '@/stores/entertainmentStore'
+import type { POPULARMOVIES } from '@/interfaces/popularMoviesInterface'
+import type { TVSHOW } from '@/interfaces/tvInterface'
+import type { CELEB } from '@/interfaces/celebInterface'
 
-const popularMovies = ref([])
-const nowPlaying = ref([])
-const popularTv = ref([])
-const celebs = ref([])
+const popularMovies = ref<POPULARMOVIES[]>([])
+const nowPlaying = ref<POPULARMOVIES[]>([])
+const popularTv = ref<TVSHOW[]>([])
+const celebs = ref<CELEB[]>([])
 const imagePath = ref('https://image.tmdb.org/t/p/w500')
 
 const entertainmentStore = useEntertainmentStore()
@@ -22,7 +25,6 @@ async function loadContent() {
   await entertainmentStore.loadPopularTv(1)
   await entertainmentStore.loadCelebs(1)
   popularMovies.value = toRaw(entertainmentStore.setPopularMovies)
-  console.log(popularMovies.value, toRaw(entertainmentStore.setPopularMovies))
   nowPlaying.value = toRaw(entertainmentStore.setNowPlaying)
   popularTv.value = toRaw(entertainmentStore.setPopularTv)
   celebs.value = toRaw(entertainmentStore.celebs)

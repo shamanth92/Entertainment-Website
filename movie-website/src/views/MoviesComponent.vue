@@ -9,9 +9,9 @@ import { useRouter } from 'vue-router'
 const popularMovies = ref<POPULARMOVIES[]>([])
 const topRatedMovies = ref<TOPRATED[]>([])
 const upcomingMovies = ref<POPULARMOVIES[]>([])
-const loadPopular = ref([])
-const loadTopRated = ref([])
-const loadUpcoming = ref([])
+const loadPopular = ref<POPULARMOVIES[]>([])
+const loadTopRated = ref<TOPRATED[]>([])
+const loadUpcoming = ref<POPULARMOVIES[]>([])
 const popularNumber = ref(1)
 const topRatedNumber = ref(1)
 const upcomingNumber = ref(1)
@@ -53,10 +53,6 @@ async function loadMoreMovies(tab: string) {
     topRatedNumber.value = topRatedNumber.value + 1
     await entertainmentStore.loadTopRatedMovies(topRatedNumber.value)
     loadTopRated.value = toRaw(entertainmentStore.topRatedMovies)
-    console.log(
-      'toRaw(entertainmentStore.topRatedMovies): ',
-      toRaw(entertainmentStore.topRatedMovies),
-    )
     loadTopRated.value.forEach((movie) => {
       topRatedMovies.value.push(movie)
     })
@@ -74,7 +70,7 @@ async function openMovie(id: number) {
   await entertainmentStore.loadMovieDetails(id)
   await entertainmentStore.loadMovieCredits(id)
   await entertainmentStore.loadMovieVideos(id)
-  await entertainmentStore.userReviews(id)
+  // await entertainmentStore.userReviews(id)
   router.replace(`/movies/${id}`)
 }
 </script>

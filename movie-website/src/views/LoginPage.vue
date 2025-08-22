@@ -48,8 +48,6 @@ function handleOk() {
 const entertainmentStore = useEntertainmentStore()
 
 function handleLogin() {
-  console.log('loginFormState: ', loginFormState)
-  console.log('import.meta.env.VITE_API_KEY: ', import.meta.env.VITE_API_KEY)
   fetch('http://localhost:5000/api/movies/loginUser', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -62,7 +60,6 @@ function handleLogin() {
       return response.json()
     })
     .then((data) => {
-      console.log(data)
       if (data.status) {
         openLogin.value = false
         openRegister.value = false
@@ -79,7 +76,6 @@ function handleLogin() {
 
 function handleRegister() {
   if (openRegister.value) {
-    console.log(registerFormState)
     fetch('http://localhost:5000/api/movies/registerNewUser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

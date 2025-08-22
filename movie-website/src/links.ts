@@ -1,4 +1,4 @@
-export default function setLinks(stream) {
+export default function setLinks(stream: string) {
     switch (stream) {
         case "Netflix":
             return 'https://www.netflix.com/'

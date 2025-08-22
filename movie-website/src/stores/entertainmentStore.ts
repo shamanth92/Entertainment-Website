@@ -1,5 +1,8 @@
+import type { CELEB, CELEBCREDITS, CELEBDETAILS } from '@/interfaces/celebInterface';
 import type { LIKEDMOVIES, LIKEDTV } from '@/interfaces/likeWatchlist'
-import type { POPULARMOVIES } from '@/interfaces/popularMoviesInterface'
+import type { CASTMEMBER, MOVIEDETAILS, MOVIETRAILER, POPULARMOVIES } from '@/interfaces/popularMoviesInterface'
+import type { TOPRATED, TOPRATEDTV } from '@/interfaces/topRatedInterface';
+import type { SEASONDETAILS, TVCREDITS, TVDETAILS, TVSHOW } from '@/interfaces/tvInterface';
 import { defineStore } from 'pinia'
 
 // interface POPULARMOVIES {
@@ -19,12 +22,42 @@ import { defineStore } from 'pinia'
 //   name: string
 // }
 
+type EntertainmentStoreState = {
+  popularMovies: POPULARMOVIES[];
+  nowPlaying: POPULARMOVIES[]
+  videos: MOVIETRAILER[]
+  movieDetails: MOVIEDETAILS
+  movieCredits: CASTMEMBER[]
+  topRatedMovies: TOPRATED[]
+  upcomingMovies: POPULARMOVIES[]
+  likedMovies: LIKEDMOVIES[]
+  watchlistMovies: LIKEDMOVIES[]
+  likedTv: LIKEDTV[]
+  watchlistTv: LIKEDTV[]
+  searchedMovies: POPULARMOVIES[]
+  movieVideos: MOVIETRAILER[]
+  // movieReviews: []
+  celebs: CELEB[]
+  celebDetails: CELEBDETAILS
+  celebCredits: CELEBCREDITS[]
+  popularTv: TVSHOW[]
+  tvDetails: TVDETAILS
+  tvCredits: TVCREDITS
+  topRatedTv: TOPRATEDTV[]
+  onTv: TVSHOW[]
+  airingToday: TOPRATEDTV[]
+  tvVideos: MOVIETRAILER[]
+  tvEpisodesAndSeasons: SEASONDETAILS
+  options: string[]
+  loggedInUsername: string
+}
+
 export const useEntertainmentStore = defineStore('entertainment', {
-  state: () => ({
+  state: (): EntertainmentStoreState => ({
     popularMovies: [],
     nowPlaying: [],
     videos: [],
-    movieDetails: [],
+    movieDetails: {} as MOVIEDETAILS,
     movieCredits: [],
     topRatedMovies: [],
     upcomingMovies: [],
@@ -34,18 +67,18 @@ export const useEntertainmentStore = defineStore('entertainment', {
     watchlistTv: [],
     searchedMovies: [],
     movieVideos: [],
-    movieReviews: [],
+    // movieReviews: [],
     celebs: [],
-    celebDetails: {},
+    celebDetails: {} as CELEBDETAILS,
     celebCredits: [],
     popularTv: [],
-    tvDetails: [],
-    tvCredits: [],
+    tvDetails: {} as TVDETAILS,
+    tvCredits: {} as TVCREDITS,
     topRatedTv: [],
     onTv: [],
     airingToday: [],
     tvVideos: [],
-    tvEpisodesAndSeasons: [],
+    tvEpisodesAndSeasons: {} as SEASONDETAILS,
     options: ['Home', 'Movies', 'TV', 'Celebs', 'List'],
     loggedInUsername: '',
   }),
@@ -63,7 +96,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
     setWatchlistTv: (state) => state.popularMovies,
     setSearchedMovies: (state) => state.searchedMovies,
     setMovieVideos: (state) => state.movieVideos,
-    setUserReviews: (state) => state.movieReviews,
+    // setUserReviews: (state) => state.movieReviews,
     setCelebs: (state) => state.celebs,
     setCelebDetails: (state) => state.celebDetails,
     setCelebCredits: (state) => state.celebCredits,
@@ -79,7 +112,6 @@ export const useEntertainmentStore = defineStore('entertainment', {
   actions: {
     async loadPopularMovies(payload: number) {
       try {
-        console.log('import.meta.env.VITE_API_KEY: ', import.meta.env.VITE_API_KEY);
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/popular?api_key=${import.meta.env.VITE_API_KEY}&language=en-US&page=${payload}`,
         )
@@ -88,7 +120,6 @@ export const useEntertainmentStore = defineStore('entertainment', {
         }
 
         const responseData = await response.json()
-        console.log('responseData: ', responseData)
         this.popularMovies = responseData.results
       } catch (error) {
         return error
@@ -119,7 +150,6 @@ export const useEntertainmentStore = defineStore('entertainment', {
         }
 
         const responseData = await response.json()
-                console.log('responseData: ', responseData);
 
         this.videos = responseData.results
       } catch (error) {
@@ -127,7 +157,6 @@ export const useEntertainmentStore = defineStore('entertainment', {
       }
     },
     async loadMovieDetails(payload: number) {
-      console.log('payload: ', payload);
       try {
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${payload}?api_key=${import.meta.env.VITE_API_KEY}&language=en-US`,
@@ -187,7 +216,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
         return error
       }
     },
-    async addToLikedMovies(payload: POPULARMOVIES) {
+    async addToLikedMovies(payload: MOVIEDETAILS) {
       try {
         const requestOptions = {
           method: 'POST',
@@ -225,7 +254,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
         return error
       }
     },
-    async addToWatchlistMovies(payload: POPULARMOVIES) {
+    async addToWatchlistMovies(payload: MOVIEDETAILS) {
       try {
         const requestOptions = {
           method: 'POST',
@@ -254,7 +283,10 @@ export const useEntertainmentStore = defineStore('entertainment', {
 
         const responseData = await response.json()
         responseData.forEach((movie: LIKEDMOVIES) => {
-          if (this.watchlistMovies.filter((m: LIKEDMOVIES) => m.movieId === movie.movieId).length === 0) {
+          if (
+            this.watchlistMovies.filter((m: LIKEDMOVIES) => m.movieId === movie.movieId).length ===
+            0
+          ) {
             this.watchlistMovies.push(movie)
           }
         })
@@ -262,7 +294,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
         return error
       }
     },
-    async addToLikedTv(payload) {
+    async addToLikedTv(payload: TVDETAILS) {
       try {
         const requestOptions = {
           method: 'POST',
@@ -299,7 +331,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
         return error
       }
     },
-    async addToWatchlistTv(payload) {
+    async addToWatchlistTv(payload: TVDETAILS) {
       try {
         const requestOptions = {
           method: 'POST',
@@ -347,7 +379,6 @@ export const useEntertainmentStore = defineStore('entertainment', {
 
         const responseData = await response.json()
         this.searchedMovies = responseData.results
-        console.log('responseData: ', responseData)
       } catch (error) {
         return error
       }
@@ -367,21 +398,21 @@ export const useEntertainmentStore = defineStore('entertainment', {
         return error
       }
     },
-    async userReviews(payload: number) {
-      try {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${payload}/reviews?api_key=${import.meta.env.VITE_API_KEY}&language=en-US&page=1`,
-        )
-        if (!response.ok) {
-          console.log('ok')
-        }
+    // async userReviews(payload: number) {
+    //   try {
+    //     const response = await fetch(
+    //       `https://api.themoviedb.org/3/movie/${payload}/reviews?api_key=${import.meta.env.VITE_API_KEY}&language=en-US&page=1`,
+    //     )
+    //     if (!response.ok) {
+    //       console.log('ok')
+    //     }
 
-        const responseData = await response.json()
-        this.movieReviews = responseData
-      } catch (error) {
-        return error
-      }
-    },
+    //     const responseData = await response.json()
+    //     this.movieReviews = responseData
+    //   } catch (error) {
+    //     return error
+    //   }
+    // },
     async loadCelebs(payload: number) {
       try {
         const response = await fetch(

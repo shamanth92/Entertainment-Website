@@ -4,15 +4,16 @@ import SearchComponent from '@/components/Shared/SearchComponent.vue'
 import { useEntertainmentStore } from '@/stores/entertainmentStore'
 import type { TOPRATEDTV } from '@/interfaces/topRatedInterface'
 import { useRouter } from 'vue-router'
+import type { TVSHOW } from '@/interfaces/tvInterface'
 
 const topRatedTv = ref<TOPRATEDTV[]>([])
 const onTelevision = ref<TOPRATEDTV[]>([])
 const airingTodayTv = ref<TOPRATEDTV[]>([])
-const loadTopRated = ref([])
+const loadTopRated = ref<TOPRATEDTV[]>([])
 const topRatedNumber = ref(1)
-const loadOnTv = ref([])
+const loadOnTv = ref<TVSHOW[]>([])
 const onTvNumber = ref(1)
-const loadAiring = ref([])
+const loadAiring = ref<TOPRATEDTV[]>([])
 const airingNumber = ref(1)
 const imagePath = ref('https://image.tmdb.org/t/p/w500')
 const hovered = ref(false)
@@ -30,7 +31,6 @@ onMounted(async () => {
   onTelevision.value = toRaw(entertainmentStore.setPopularTv)
   await entertainmentStore.loadAiringToday(airingNumber.value)
   airingTodayTv.value = toRaw(entertainmentStore.setAiringToday)
-  // console.log(this.topRatedTv)
 })
 
 function showOptions(i: number) {

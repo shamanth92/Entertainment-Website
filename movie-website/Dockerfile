@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20-alpine AS build-stage
 
 WORKDIR /MOVIEWEBSITE
 
@@ -8,6 +8,13 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 5173
+RUN npm run build
 
-CMD ["npm", "run", "start"]
+FROM nginx:stable-alpine AS production-stage
+
+COPY --from=build-stage /MOVIEWEBSITE/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
