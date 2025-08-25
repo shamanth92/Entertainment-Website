@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movie-website
+  labels:
+    frontendapp: moviewebapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      frontendapp: moviewebapp
+  template:
+    metadata:
+      labels:
+        frontendapp: moviewebapp
+    spec:
+      containers:
+        - name: movie-website-app
+          image: movie-website:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movie-website-service
+spec:
+  type: NodePort
+  selector:
+    frontendapp: moviewebapp
+  ports:
+    - nodePort: 30163
+      port: 8080
+      targetPort: 80

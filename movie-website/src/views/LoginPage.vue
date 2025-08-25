@@ -48,7 +48,7 @@ function handleOk() {
 const entertainmentStore = useEntertainmentStore()
 
 function handleLogin() {
-  fetch('http://localhost:5000/api/movies/loginUser', {
+  fetch(`${import.meta.env.VITE_API_URL}/loginUser`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -76,7 +76,7 @@ function handleLogin() {
 
 function handleRegister() {
   if (openRegister.value) {
-    fetch('http://localhost:5000/api/movies/registerNewUser', {
+    fetch(`${import.meta.env.VITE_API_URL}/registerNewUser`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

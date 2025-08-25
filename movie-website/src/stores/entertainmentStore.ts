@@ -229,7 +229,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
             username: payload.username,
           }),
         }
-        await fetch(`http://localhost:5000/api/movies/likedMovies`, requestOptions)
+        await fetch(`${import.meta.env.VITE_API_URL}/likedMovies`, requestOptions)
       } catch (error) {
         return error
       }
@@ -237,7 +237,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
     async getLikedMovies(payload: { username: string }) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/movies/likedMovies?username=${payload.username}`,
+          `${import.meta.env.VITE_API_URL}/likedMovies?username=${payload.username}`,
         )
         if (!response.ok) {
           console.log('ok')
@@ -267,7 +267,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
             username: payload.username,
           }),
         }
-        await fetch(`http://localhost:5000/api/movies/watchlistMovies`, requestOptions)
+        await fetch(`${import.meta.env.VITE_API_URL}/watchlistMovies`, requestOptions)
       } catch (error) {
         return error
       }
@@ -275,7 +275,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
     async getWatchlistMovies(payload: { username: string }) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/movies/watchlistMovies?username=${payload.username}`,
+          `${import.meta.env.VITE_API_URL}/watchlistMovies?username=${payload.username}`,
         )
         if (!response.ok) {
           console.log('ok')
@@ -307,7 +307,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
             username: payload.username,
           }),
         }
-        await fetch(`http://localhost:5000/api/movies/likedTv`, requestOptions)
+        await fetch(`${import.meta.env.VITE_API_URL}/likedTv`, requestOptions)
       } catch (error) {
         return error
       }
@@ -315,7 +315,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
     async getLikedTv(payload: { username: string }) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/movies/likedTv?username=${payload.username}`,
+          `${import.meta.env.VITE_API_URL}/likedTv?username=${payload.username}`,
         )
         if (!response.ok) {
           console.log('ok')
@@ -344,7 +344,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
             username: payload.username,
           }),
         }
-        await fetch(`http://localhost:5000/api/movies/watchlistTv`, requestOptions)
+        await fetch(`${import.meta.env.VITE_API_URL}/watchlistTv`, requestOptions)
       } catch (error) {
         return error
       }
@@ -352,7 +352,7 @@ export const useEntertainmentStore = defineStore('entertainment', {
     async getWatchlistTv(payload: { username: string }) {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/movies/watchlistTv?username=${payload.username}`,
+          `${import.meta.env.VITE_API_URL}/watchlistTv?username=${payload.username}`,
         )
         if (!response.ok) {
           console.log('ok')
