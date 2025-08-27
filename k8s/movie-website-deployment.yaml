@@ -27,10 +27,9 @@ kind: Service
 metadata:
   name: movie-website-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     frontendapp: moviewebapp
   ports:
-    - nodePort: 30163
-      port: 8080
+    - port: 80
       targetPort: 80
