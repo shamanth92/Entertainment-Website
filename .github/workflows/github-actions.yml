@@ -65,6 +65,6 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
       - name: Push backend image to DigitalOcean Container Registry
-        run: docker push ${{ secrets.REGISTRY_NAME }}/entertainmentr:server-$(echo $GITHUB_SHA | head -c7)
+        run: docker push ${{ secrets.REGISTRY_NAME }}/entertainment:server-$(echo $GITHUB_SHA | head -c7)
       - name: Push frontend image to DigitalOcean Container Registry
         run: docker push ${{ secrets.REGISTRY_NAME }}/entertainment:movies-$(echo $GITHUB_SHA | head -c7)
