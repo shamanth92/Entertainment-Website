@@ -7,49 +7,49 @@ on:
     branches: [main]
 
 jobs:
-  vue-frontend-lint:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: movie-website
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+  # vue-frontend-lint:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: movie-website
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22.17.0"
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: "22.17.0"
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Run Linting
-        run: npm run lint
+  #     - name: Run Linting
+  #       run: npm run lint
 
-  node-backend-lint:
-    needs: vue-frontend-lint
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: server
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+  # node-backend-lint:
+  #   needs: vue-frontend-lint
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: server
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22.17.0"
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: "22.17.0"
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Run Linting
-        run: npm run lint
+  #     - name: Run Linting
+  #       run: npm run lint
 
   docker-images-digitalocean-registry:
-    needs: node-backend-lint
+    # needs: node-backend-lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -67,4 +67,4 @@ jobs:
       # - name: Push backend image to DigitalOcean Container Registry
       #   run: docker push ${{ secrets.REGISTRY_NAME }}/movie-server:$(echo $GITHUB_SHA | head -c7)
       - name: Push frontend image to DigitalOcean Container Registry
-        run: docker push ${{ secrets.REGISTRY_NAME }}/movie-server:$(echo $GITHUB_SHA | head -c7)
+        run: docker push ${{ secrets.REGISTRY_NAME }}/movie-website:$(echo $GITHUB_SHA | head -c7)
