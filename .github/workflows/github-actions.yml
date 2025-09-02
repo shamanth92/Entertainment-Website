@@ -90,7 +90,8 @@ jobs:
           sed -i "s|MOVIE_WEBSITE_IMAGE|${{ secrets.REGISTRY_NAME }}/entertainment:movies-$SHORT_SHA|g" k8s/movie-website-deployment.yaml
       - name: Replace env placeholders
         run: |
-          sed -i "s|DB_URL_VALUE|${{ secrets.DB_URL }}|g" k8s/movie-server-deployment.yaml
+          SAFE_DB_URL=$(printf '%s' "${{ secrets.DB_URL }}" | sed 's/&/\\&/g')
+          sed -i "s|DB_URL_VALUE|$SAFE_DB_URL|g" k8s/movie-server-deployment.yaml
           sed -i "s|API_KEY_VALUE|${{ secrets.VITE_API_KEY }}|g" k8s/movie-website-deployment.yaml
       - name: Save DigitalOcean kubeconfig with short-lived credentials
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
