@@ -61,7 +61,10 @@ jobs:
       - name: Build Backend Image
         run: docker build -t ${{ secrets.REGISTRY_NAME }}/entertainment:server-$(echo $GITHUB_SHA | head -c7) ./server
       - name: Build Frontend Image
-        run: docker build -t ${{ secrets.REGISTRY_NAME }}/entertainment:movies-$(echo $GITHUB_SHA | head -c7) ./movie-website
+        run: |
+          docker build \
+              --build-arg VITE_API_URL=http://143.244.202.47/api/movies \
+              -t ${{ secrets.REGISTRY_NAME }}/entertainment:movies-${GITHUB_SHA::7} ./movie-website
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
       - name: Push backend image to DigitalOcean Container Registry
