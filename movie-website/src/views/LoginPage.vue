@@ -48,9 +48,7 @@ function handleOk() {
 const entertainmentStore = useEntertainmentStore()
 
 function handleLogin() {
-  console.log('loginFormState: ', loginFormState)
-  console.log('import.meta.env.VITE_API_KEY: ', import.meta.env.VITE_API_KEY)
-  fetch('http://localhost:5000/api/movies/loginUser', {
+  fetch(`${import.meta.env.VITE_API_URL}/loginUser`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -62,7 +60,6 @@ function handleLogin() {
       return response.json()
     })
     .then((data) => {
-      console.log(data)
       if (data.status) {
         openLogin.value = false
         openRegister.value = false
@@ -79,8 +76,7 @@ function handleLogin() {
 
 function handleRegister() {
   if (openRegister.value) {
-    console.log(registerFormState)
-    fetch('http://localhost:5000/api/movies/registerNewUser', {
+    fetch(`${import.meta.env.VITE_API_URL}/registerNewUser`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -116,7 +112,7 @@ function handleRegister() {
       <div class="rounded-[15px] border bg-black" style="padding: 20px">
         <div class="flex flex-col gap-5">
           <div class="flex items-center flex-col pt-8">
-            <p class="text-teal-500 text-[24px]">Welcome to Entertainment City!</p>
+            <p class="text-teal-500 text-[24px]">Welcome to Entertainment City</p>
             <p class="text-teal-500 text-[20px]">
               Create a new account or login to explore movies and tv shows
             </p>

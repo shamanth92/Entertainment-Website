@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movie-server
+  labels:
+    backendserver: movieserverbackend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      backendserver: movieserverbackend
+  template:
+    metadata:
+      labels:
+        backendserver: movieserverbackend
+    spec:
+      containers:
+        - name: movie-server-backend
+          image: MOVIE_SERVER_IMAGE
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_URL
+              value: "DB_URL_VALUE"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: movie-server-service
+spec:
+  type: ClusterIP
+  selector:
+    backendserver: movieserverbackend
+  ports:
+    - port: 5000
+      targetPort: 5000

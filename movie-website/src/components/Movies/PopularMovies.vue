@@ -4,6 +4,7 @@ import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 import { useEntertainmentStore } from '@/stores/entertainmentStore'
 import { useRouter } from 'vue-router'
+import type { MOVIETRAILER } from '@/interfaces/popularMoviesInterface'
 
 const router = useRouter()
 
@@ -15,15 +16,14 @@ const settings = ref({
   itemsToShow: 1,
   snapAlign: 'center',
 })
-const trailers = ref([])
+const trailers = ref<MOVIETRAILER[]>([])
 const trailerLink = ref('')
 const iFrameLink = ref('')
 
 async function playTrailer(movieId: number) {
   await entertainmentStore.loadVideos(movieId)
   trailers.value = toRaw(entertainmentStore.videos)
-  // console.log([...trailers.value])
-  trailers.value.forEach((t: { type: string; key: number }) => {
+  trailers.value.forEach((t: MOVIETRAILER) => {
     if (t.type === 'Trailer') {
       trailerLink.value = `https://www.youtube.com/watch?v=${t.key}`
       iFrameLink.value = `https://www.youtube.com/embed/${t.key}`
@@ -31,7 +31,6 @@ async function playTrailer(movieId: number) {
   })
   const windowFeatures = 'width=1500,height=1000'
   // window.open(trailerLink, "youtubetrailer", windowFeatures);
-  console.log('iframe: ', iFrameLink)
   window.open(iFrameLink.value, 'youtubetrailer', windowFeatures)
 }
 
@@ -39,7 +38,7 @@ async function openMovie(movie: { id: number }) {
   await entertainmentStore.loadMovieDetails(movie.id)
   await entertainmentStore.loadMovieCredits(movie.id)
   await entertainmentStore.loadMovieVideos(movie.id)
-  await entertainmentStore.userReviews(movie.id)
+  // await entertainmentStore.userReviews(movie.id)
   router.replace(`/movies/${movie.id}`)
 }
 </script>

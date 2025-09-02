@@ -6,7 +6,7 @@ import { useEntertainmentStore } from '@/stores/entertainmentStore'
 import type { POPULARMOVIES } from '@/interfaces/popularMoviesInterface'
 import { useRouter } from 'vue-router'
 import type { LIKEDMOVIES, LIKEDTV } from '@/interfaces/likeWatchlist'
-import type { TVSHOW } from '@/interfaces/tvInterface'
+import type { TVDETAILS, TVSHOW } from '@/interfaces/tvInterface'
 
 const entertainmentStore = useEntertainmentStore()
 const props = defineProps(['path', 'content', 'type', 'img', 'filter'])
@@ -17,10 +17,10 @@ const liked = ref(false)
 const checked = ref(false)
 const likedIndex = ref<number[]>([])
 const addedIndex = ref<number[]>([])
-const likedMovies = ref([])
-const watchlistMovies = ref([])
-const likedTv = ref([])
-const watchlistTv = ref([])
+const likedMovies = ref<LIKEDMOVIES[]>([])
+const watchlistMovies = ref<LIKEDMOVIES[]>([])
+const likedTv = ref<LIKEDTV[]>([])
+const watchlistTv = ref<LIKEDTV[]>([])
 const noImage = ref(
   'https://thumbs.dreamstime.com/b/no-image-available-icon-photo-camera-flat-vector-illustration-132483141.jpg',
 )
@@ -76,7 +76,6 @@ async function loadDetails() {
   watchlistTv.value = toRaw(entertainmentStore.watchlistTv)
   if (props.filter === 'Movie') {
     props.content.forEach((element: POPULARMOVIES, i: number) => {
-      console.log('element: ', props.content)
       if (likedMovies.value.filter((m: LIKEDMOVIES) => m.title === element.title).length > 0) {
         likedIndex.value.push(i)
       }
@@ -86,7 +85,6 @@ async function loadDetails() {
     })
   } else if (props.filter === 'Tv') {
     props.content.forEach((element: TVSHOW, i: number) => {
-      console.log('element: ', element)
       if (likedTv.value.filter((m: LIKEDTV) => m.title === element.name).length > 0) {
         likedIndex.value.push(i)
       }
@@ -107,7 +105,6 @@ function hideOptions() {
 }
 
 async function openMovie(movie: POPULARMOVIES) {
-  console.log('props.filter: ', props.filter, movie.id)
   if (props.filter === 'Movie') {
     await entertainmentStore.loadMovieDetails(movie.id)
     await entertainmentStore.loadMovieCredits(movie.id)
@@ -123,10 +120,9 @@ async function openMovie(movie: POPULARMOVIES) {
   }
 }
 
-async function likeContent(movie: POPULARMOVIES, type: string, index: number) {
+async function likeContent(movie: TVDETAILS, type: string, index: number) {
   liked.value = true
   likedIndex.value.push(index)
-  //   console.log(movie, store.loggedInUsername);
   let moviePayload = movie
   moviePayload = { ...movie, username: entertainmentStore.loggedInUsername }
 
@@ -137,7 +133,7 @@ async function likeContent(movie: POPULARMOVIES, type: string, index: number) {
   }
 }
 
-async function addContent(movie: POPULARMOVIES, type: string, index: number) {
+async function addContent(movie: TVDETAILS, type: string, index: number) {
   checked.value = true
   addedIndex.value.push(index)
   let moviePayload = movie

@@ -9,6 +9,8 @@ app.use(cors());
 
 const userSavedMovies = require("./routes/api/userMovies");
 
+app.use(express.json());
+
 app.use("/api/movies", userSavedMovies);
 
 const port = process.env.PORT || 5000;

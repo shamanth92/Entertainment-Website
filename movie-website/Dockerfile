@@ -1,0 +1,28 @@
+FROM node:20-alpine AS build-stage
+
+WORKDIR /MOVIEWEBSITE
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+ARG VITE_API_URL
+
+ARG VITE_API_KEY
+
+ENV VITE_API_URL=$VITE_API_URL
+
+ENV VITE_API_KEY=$VITE_API_KEY
+
+RUN npm run build
+
+FROM nginx:stable-alpine AS production-stage
+
+COPY --from=build-stage /MOVIEWEBSITE/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+

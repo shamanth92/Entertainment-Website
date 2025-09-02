@@ -48,12 +48,10 @@ async function navigateToMovie(movieTitle: string) {
 // ✅ Debounced search function
 const getSearchedMovies = _.debounce(async (query: string) => {
   options.value = []
-  console.log('query: ', query)
   if (query.length < 3) return
 
   if (props.type === 'movie') {
     // Use Pinia instead of Vuex
-    console.log('props.type: ', props.type)
     await entertainmentStore.searchMovies(query)
     allMovieResults.value = toRaw(entertainmentStore.searchedMovies)
     options.value = allMovieResults.value.map((movie: POPULARMOVIES) => ({
@@ -62,7 +60,6 @@ const getSearchedMovies = _.debounce(async (query: string) => {
       year: movie.release_date?.slice(0, 4),
       poster: movie.poster_path,
     }))
-    console.log('options: ', toRaw(options.value))
   } else {
     try {
       const res = await fetch(
@@ -70,7 +67,6 @@ const getSearchedMovies = _.debounce(async (query: string) => {
       )
       const response = await res.json()
       allTvResults.value = response.results
-      console.log('response.results: ', response.results)
       options.value = allTvResults.value.map((show: TVSHOW) => ({
         id: show.id,
         value: show.original_name,

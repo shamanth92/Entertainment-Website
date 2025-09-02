@@ -1,30 +1,32 @@
 <script setup lang="ts">
-import setLinks from './../links'
+// import setLinks from './../links'
 import { useRoute } from 'vue-router'
 import { onMounted, ref, toRaw } from 'vue'
 import { useEntertainmentStore } from '@/stores/entertainmentStore'
-import type { TVDETAILS } from '@/interfaces/tvInterface'
+import type { SEASONDETAILS, TVCREDITS, TVDETAILS } from '@/interfaces/tvInterface'
 import { useRouter } from 'vue-router'
 import type { LIKEDTV } from '@/interfaces/likeWatchlist'
+import type { MOVIETRAILER } from '@/interfaces/popularMoviesInterface'
+import type { CASTMEMBER } from '@/interfaces/tvInterface'
 
-const movieDetails = ref<TVDETAILS>({})
+const movieDetails = ref<TVDETAILS>({} as TVDETAILS)
 const imagePath = ref('https://image.tmdb.org/t/p/w500')
-const movieCredits = ref([])
-const allCast = ref([])
+const movieCredits = ref<TVCREDITS>({} as TVCREDITS)
+const allCast = ref<CASTMEMBER[]>([])
 const genres = ref<string[]>([])
-const runTime = ref([])
-const streamLink = ref('')
-const trailers = ref([])
-const spliceCast = ref([])
+const runTime = ref<number[]>([])
+// const streamLink = ref('')
+const trailers = ref<MOVIETRAILER[]>([])
+const spliceCast = ref<CASTMEMBER[]>([])
 const showAllCast = ref(false)
 const hovered = ref(false)
 const hoveredIndex = ref(-1)
 const liked = ref(false)
 const checked = ref(false)
 const iFrameLink = ref('')
-const episodesAndseasons = ref([])
+const episodesAndseasons = ref<SEASONDETAILS>({} as SEASONDETAILS)
 const visible = ref(false)
-const allEpisodes = ref([])
+const allEpisodes = ref<SEASONDETAILS[]>([])
 const activeKey = ref(0)
 const likedTv = ref<LIKEDTV[]>([])
 const watchlistTv = ref<LIKEDTV[]>([])
@@ -37,7 +39,7 @@ onMounted(() => {
 })
 
 async function loadMovieDetails() {
-  movieDetails.value = toRaw(entertainmentStore.setTvDetails)
+  movieDetails.value = toRaw(entertainmentStore.setTvDetails) as TVDETAILS
   movieCredits.value = toRaw(entertainmentStore.setTvCredits)
   allCast.value = movieCredits.value.cast.filter((cast) => cast.known_for_department === 'Acting')
   movieDetails.value.genres.forEach((g) => {
@@ -48,7 +50,7 @@ async function loadMovieDetails() {
   })
   const cloneCast = allCast.value.slice(0)
   spliceCast.value = cloneCast.splice(0, 10)
-  streamLink.value = setLinks(movieDetails.value.networks[0].name)
+  // streamLink.value = setLinks(movieDetails.value.networks[0].name)
   const route = useRoute()
   for (let i = 0; i < movieDetails.value.number_of_seasons; i++) {
     await entertainmentStore.loadTvEpisodesAndSeasons({
@@ -58,7 +60,6 @@ async function loadMovieDetails() {
     episodesAndseasons.value = toRaw(entertainmentStore.tvEpisodesAndSeasons)
     allEpisodes.value.push(episodesAndseasons.value)
   }
-  // console.log(allEpisodes)
   await entertainmentStore.getLikedTv({
     username: entertainmentStore.loggedInUsername,
   })
@@ -74,7 +75,7 @@ async function loadMovieDetails() {
 async function playTrailer(movieId: number) {
   await entertainmentStore.loadTvVideos(movieId)
   trailers.value = toRaw(entertainmentStore.setTvVideos)
-  trailers.value.forEach((t: { type: string }) => {
+  trailers.value.forEach((t: { type: string; key: string }) => {
     if (t.type === 'Trailer') {
       // trailerLink = `https://www.youtube.com/watch?v=${t.key}`
       iFrameLink.value = `https://www.youtube.com/embed/${t.key}`
@@ -93,7 +94,7 @@ function goBack() {
   showAllCast.value = false
 }
 
-function showOptions(i) {
+function showOptions(i: number) {
   hovered.value = true
   hoveredIndex.value = i
 }
@@ -256,16 +257,13 @@ function handleOk() {
                           :key="index"
                           :value="index"
                         >
-                          <div v-for="episode in season" :key="episode.id" class="mb-5">
+                          <div v-for="episode in season.episodes" :key="episode?.id" class="mb-5">
                             <div class="d-flex justify-space-between mb-2">
-                              <h3 class="text-black">{{ episode.name }}</h3>
-                              <p class="text-grey italic">
-                                <!-- Rating: {{ episode.vote_average.toFixed(1) }} -->
-                              </p>
-                              <p class="text-grey italic">Aired On: {{ episode.air_date }}</p>
+                              <h3 class="text-black">{{ episode?.name }}</h3>
+                              <p class="text-grey italic">Aired On: {{ episode?.air_date }}</p>
                             </div>
                             <p class="text-grey-500">
-                              {{ episode.overview }} ({{ episode.runtime }}min)
+                              {{ episode?.overview }} ({{ episode?.runtime }}min)
                             </p>
                             <v-divider class="my-4" />
                           </div>

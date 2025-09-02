@@ -1,7 +1,8 @@
 const express = require("express");
-const { MongoClient, ObjectId } = require("mongodb");
-const bcrypt = require("bcrypt");
+const { MongoClient } = require("mongodb");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const router = express.Router();
 
@@ -46,7 +47,6 @@ router.post("/registerNewUser", async (req, res) => {
 
 router.post("/loginUser", async (req, res) => {
   let user = req.body;
-  console.log("user: ", user);
 
   db.collection("Users")
     .findOne({ username: user.username })
@@ -54,9 +54,7 @@ router.post("/loginUser", async (req, res) => {
       if (!loginUser) {
         res.send({ status: false, msg: "Invalid Username or Password" });
       }
-      console.log(loginUser);
       bcrypt.compare(user.password, loginUser.password).then((validUser) => {
-        console.log(validUser);
         if (validUser) {
           const payload = {
             id: validUser._id,
@@ -84,7 +82,6 @@ router.post("/loginUser", async (req, res) => {
 });
 
 router.get("/likedMovies", async (req, res) => {
-  console.log(req.query);
   // cluster.set("foo", "bar");
   // cluster.get("foo", (err, res) => {
   //   // res === 'bar'
@@ -108,13 +105,11 @@ router.post("/likedMovies", async (req, res) => {
     await db
       .collection("test")
       .insertOne({ movieId, title, poster, rating, username });
-    console.log(`Created Player ${title}`);
     res.send({ status: true, msg: "Movies Saved in the List" });
   }
 });
 
 router.delete("/likedMovies/:id", async (req, res) => {
-  console.log(req.params);
   await db.collection("test").deleteOne({ movieId: parseInt(req.params.id) });
   res.send({ status: true, msg: "Movie removed from the list" });
 });
@@ -141,13 +136,11 @@ router.post("/watchlistMovies", async (req, res) => {
     await db
       .collection("test-1")
       .insertOne({ movieId, title, poster, rating, username });
-    console.log(`Created Player ${title}`);
     res.send({ status: true, msg: "Movies Saved in the List" });
   }
 });
 
 router.delete("/watchlistMovies/:id", async (req, res) => {
-  console.log(req.params);
   await db.collection("test-1").deleteOne({ movieId: parseInt(req.params.id) });
   res.send({ status: true, msg: "Movie removed from the list" });
 });
@@ -172,13 +165,11 @@ router.post("/likedTv", async (req, res) => {
     await db
       .collection("test-2")
       .insertOne({ tvId, title, poster, rating, username });
-    console.log(`Created Player ${title}`);
     res.send({ status: true, msg: "Movies Saved in the List" });
   }
 });
 
 router.delete("/likedTv/:id", async (req, res) => {
-  console.log(req.params);
   await db.collection("test-2").deleteOne({ tvId: parseInt(req.params.id) });
   res.send({ status: true, msg: "TV removed from the list" });
 });
@@ -203,22 +194,21 @@ router.post("/watchlistTv", async (req, res) => {
     await db
       .collection("test-3")
       .insertOne({ tvId, title, poster, rating, username });
-    console.log(`Created Player ${title}`);
     res.send({ status: true, msg: "Movies Saved in the List" });
   }
 });
 
 router.delete("/watchlistTv/:id", async (req, res) => {
-  console.log(req.params);
   await db.collection("test-3").deleteOne({ tvId: parseInt(req.params.id) });
   res.send({ status: true, msg: "TV removed from the list" });
 });
 
 const url = process.env.DB_URL;
 
+console.log("url: ", url);
+
 (async () => {
   let client = await MongoClient.connect(url, { useNewUrlParser: true });
-  console.log("line 132: ", client.db("test"));
 
   // if (db) {
   db = client.db("test");

@@ -21,12 +21,12 @@ const spliceCast = ref<any[]>([])
 const hovered = ref(false)
 const liked = ref(false)
 const checked = ref(false)
-const movieVideos = ref([])
+const movieVideos = ref<MOVIETRAILER[]>([])
 // const youtube = ref('https://www.youtube.com/watch?v=')
 const imagePath = ref('https://image.tmdb.org/t/p/w500')
 const hoveredIndex = ref(-1)
 const showAllVideos = ref(false)
-const userReviews = ref([])
+// const userReviews = ref([])
 // const visible = ref(false)
 const trailers = ref<MOVIETRAILER[]>([])
 const likedMovies = ref<LIKEDMOVIES[]>([])
@@ -44,9 +44,8 @@ async function loadMovieDetails() {
   movieDetails.value = toRaw(entertainmentStore.setMovieDetails) as MOVIEDETAILS
   movieCredits.value = toRaw(entertainmentStore.setMovieCredits)
   movieVideos.value = toRaw(entertainmentStore.setMovieVideos)
-  userReviews.value = toRaw(entertainmentStore.setUserReviews)
+  // userReviews.value = toRaw(entertainmentStore.setUserReviews)
   allCast.value = movieCredits.value.filter((cast) => cast.known_for_department === 'Acting')
-  console.log('movieDetails.value: ', movieDetails.value, toRaw(entertainmentStore.setMovieDetails))
   movieDetails.value.genres?.forEach((g) => {
     genres.value.push(' ' + g.name)
   })
@@ -66,7 +65,6 @@ async function loadMovieDetails() {
 }
 
 function viewAllCast() {
-  console.log('clicked')
   showAllCast.value = true
 }
 
@@ -96,7 +94,6 @@ async function openCeleb(cast: { id: number }) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function likeContent(movie: MOVIEDETAILS) {
-  console.log(movie)
   liked.value = !liked.value
   let moviePayload = movie
   moviePayload = { ...movie, username: entertainmentStore.loggedInUsername }
@@ -104,7 +101,6 @@ async function likeContent(movie: MOVIEDETAILS) {
 }
 
 async function addContent(movie: MOVIEDETAILS) {
-  console.log(movie)
   checked.value = true
   let moviePayload = movie
   moviePayload = { ...movie, username: entertainmentStore.loggedInUsername }
@@ -118,7 +114,6 @@ function removeContent() {
 async function playTrailer(movieId: number) {
   await entertainmentStore.loadVideos(movieId)
   trailers.value = toRaw(entertainmentStore.setVideos)
-  console.log(toRaw(entertainmentStore.setVideos))
   let iFrameLink = ''
   trailers.value.forEach((t) => {
     if (t.type === 'Trailer') {
@@ -128,7 +123,6 @@ async function playTrailer(movieId: number) {
   })
   const windowFeatures = 'width=1200,height=800'
   // window.open(this.trailerLink, "youtubetrailer", windowFeatures);
-  // console.log('iframe: ', this.iFrameLink)
   window.open(iFrameLink, 'youtubetrailer', windowFeatures)
 }
 

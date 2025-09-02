@@ -38,10 +38,6 @@ async function getAllMovies() {
   })
   likedMovies.value = toRaw(entertainmentStore.likedMovies)
 
-  // likedMovies.value.forEach(function (element) {
-  //   console.log(element)
-  // })
-
   await entertainmentStore.getWatchlistMovies({
     username: entertainmentStore.loggedInUsername,
   })
