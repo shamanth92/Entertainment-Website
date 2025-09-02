@@ -20,6 +20,9 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
+          env:
+            - name: DB_URL
+              value: "DB_URL_VALUE"
 
 ---
 apiVersion: v1

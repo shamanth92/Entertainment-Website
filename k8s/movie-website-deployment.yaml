@@ -20,6 +20,9 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+          env:
+            - name: VITE_API_KEY
+              value: "API_KEY_VALUE"
 
 ---
 apiVersion: v1
