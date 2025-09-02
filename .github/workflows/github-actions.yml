@@ -63,7 +63,8 @@ jobs:
       - name: Build Frontend Image
         run: |
           docker build \
-              --build-arg VITE_API_URL=http://143.244.202.47/api/movies \
+              --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} \
+              --build-arg VITE_API_KEY=${{ secrets.VITE_API_KEY }} \
               -t ${{ secrets.REGISTRY_NAME }}/entertainment:movies-${GITHUB_SHA::7} ./movie-website
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 1200
@@ -92,7 +93,6 @@ jobs:
         run: |
           SAFE_DB_URL=$(printf '%s' "${{ secrets.DB_URL }}" | sed 's/&/\\&/g')
           sed -i "s|DB_URL_VALUE|$SAFE_DB_URL|g" k8s/movie-server-deployment.yaml
-          sed -i "s|API_KEY_VALUE|${{ secrets.VITE_API_KEY }}|g" k8s/movie-website-deployment.yaml
       - name: Save DigitalOcean kubeconfig with short-lived credentials
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
       - name: Deploy to Digital Ocean Kubernetes
