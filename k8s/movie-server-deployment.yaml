@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: movie-server-backend
-          image: movie-server:latest
+          image: MOVIE_SERVER_IMAGE
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000

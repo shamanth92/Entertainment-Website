@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: movie-website-app
-          image: movie-website:latest
+          image: MOVIE_WEBSITE_IMAGE
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
