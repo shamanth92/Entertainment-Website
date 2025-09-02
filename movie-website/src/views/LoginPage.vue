@@ -112,7 +112,7 @@ function handleRegister() {
       <div class="rounded-[15px] border bg-black" style="padding: 20px">
         <div class="flex flex-col gap-5">
           <div class="flex items-center flex-col pt-8">
-            <p class="text-teal-500 text-[24px]">Welcome to Entertainment City!</p>
+            <p class="text-teal-500 text-[24px]">Welcome to Entertainment City</p>
             <p class="text-teal-500 text-[20px]">
               Create a new account or login to explore movies and tv shows
             </p>
