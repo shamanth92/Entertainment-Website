@@ -205,6 +205,8 @@ router.delete("/watchlistTv/:id", async (req, res) => {
 
 const url = process.env.DB_URL;
 
+console.log("url: ", url);
+
 (async () => {
   let client = await MongoClient.connect(url, { useNewUrlParser: true });
 
